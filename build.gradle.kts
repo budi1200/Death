@@ -1,9 +1,21 @@
-val exposedVersion = "0.34.1"
-val kotlinVersion = "1.5.31"
+val exposedVersion = "0.36.2"
+val kotlinVersion = "1.6.10"
+val configurateVersion = "4.1.2"
 
 plugins {
-    kotlin("jvm") version "1.5.31"
-    id("com.github.johnrengelman.shadow") version "7.0.0"
+    kotlin("jvm") version "1.6.10"
+    id("com.github.johnrengelman.shadow") version "7.1.1"
+    id("net.kyori.blossom") version "1.3.0"
+}
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
 }
 
 group = "si.budimir"
@@ -15,32 +27,40 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
-    compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.18.1-R0.1-SNAPSHOT")
     compileOnly("org.jetbrains.exposed:exposed-core:$exposedVersion")
     compileOnly("org.jetbrains.exposed:exposed-dao:$exposedVersion")
     compileOnly("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
 
     implementation("net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT")
 
-}
-
-java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(16))
+    implementation("org.spongepowered:configurate-hocon:$configurateVersion")
+    implementation("org.spongepowered:configurate-extra-kotlin:$configurateVersion")
 }
 
 tasks.processResources {
-    expand("version" to project.version)
-    expand("kotlinVersion" to kotlinVersion)
-    expand("exposedVersion" to exposedVersion)
+    expand(
+        "version" to project.version,
+        "kotlinVersion" to kotlinVersion,
+        "exposedVersion" to exposedVersion,
+        "configurateVersion" to configurateVersion
+    )
+}
+
+blossom {
+    val file = "src/main/kotlin/si/budimir/death/enums/Constants.kt"
+    mapOf(
+        "PLUGIN_NAME" to rootProject.name,
+        "PLUGIN_VERSION" to project.version
+    ).forEach { (k, v) ->
+        replaceToken("{$k}", v, file)
+    }
 }
 
 tasks.shadowJar {
     // This makes it shadow only stuff with "implementation"
     project.configurations.implementation.get().isCanBeResolved = true
-    configurations = mutableListOf(project.configurations.implementation.get())
-
-    minimize {}
+    configurations = mutableListOf(project.configurations.implementation.get()) as List<FileCollection>?
 }
 
 task("buildAndPush") {

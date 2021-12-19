@@ -4,10 +4,8 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
-import org.bukkit.entity.Player
 import si.budimir.death.DeathMain
 import si.budimir.death.commands.subcommands.ReloadSubCommand
-import si.budimir.death.enums.Lang
 import si.budimir.death.util.MessageHelper
 
 class DeathCommand : CommandExecutor, TabExecutor {
@@ -30,7 +28,7 @@ class DeathCommand : CommandExecutor, TabExecutor {
             if (reqPerm == "" || sender.hasPermission(reqPerm)) {
                 sc.execute(sender, command, label, args)
             } else {
-                MessageHelper.sendMessage(sender as Player, Lang.MISSING_PERMISSION)
+                MessageHelper.sendMessage(sender, plugin.mainConfig.lang.missingPermission)
                 plugin.logger.info("${sender.name} is missing permission $reqPerm")
             }
         } else {

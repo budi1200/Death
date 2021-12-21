@@ -8,10 +8,9 @@ import si.budimir.death.DeathMain
 import si.budimir.death.commands.subcommands.ReloadSubCommand
 import si.budimir.death.util.MessageHelper
 
-class DeathCommand : CommandExecutor, TabExecutor {
+class DeathCommand(private val plugin: DeathMain) : CommandExecutor, TabExecutor {
     private val subCommands: MutableMap<String, SubCommandBase> = HashMap()
     private var subCommandsList: List<String> = emptyList()
-    private val plugin = DeathMain.instance
 
     init {
         subCommands["reload"] = ReloadSubCommand()

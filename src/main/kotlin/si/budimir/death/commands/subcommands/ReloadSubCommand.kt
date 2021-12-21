@@ -2,16 +2,17 @@ package si.budimir.death.commands.subcommands
 
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
 import si.budimir.death.DeathMain
 import si.budimir.death.commands.SubCommandBase
 import si.budimir.death.enums.Permission
 import si.budimir.death.util.MessageHelper
 
 class ReloadSubCommand: SubCommandBase {
+    private val plugin = DeathMain.instance
+
     override fun execute(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
 
-        val result = DeathMain.instance.mainConfigObj.reloadConfig()
+        val result = plugin.mainConfigObj.reloadConfig()
         MessageHelper.reloadPrefix()
 
         if (!result) {
@@ -19,6 +20,7 @@ class ReloadSubCommand: SubCommandBase {
             return true
         }
 
+        plugin.mainConfig = plugin.mainConfigObj.getConfig()
         MessageHelper.sendMessage(sender, "<green>Reload Complete!")
         return true
     }

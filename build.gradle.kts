@@ -1,11 +1,13 @@
 val exposedVersion = "0.36.2"
 val kotlinVersion = "1.6.10"
 val configurateVersion = "4.1.2"
+val jdbcVersion = "3.36.0.2"
+val jodaTimeVersion = "2.10.13"
 
 plugins {
     kotlin("jvm") version "1.6.10"
     id("com.github.johnrengelman.shadow") version "7.1.1"
-    id("net.kyori.blossom") version "1.3.0"
+//    id("net.kyori.blossom") version "1.3.0"
 }
 
 java {
@@ -27,13 +29,18 @@ repositories {
 }
 
 dependencies {
+    compileOnly("org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}")
+
     compileOnly("io.papermc.paper:paper-api:1.18.1-R0.1-SNAPSHOT")
-    compileOnly("org.jetbrains.exposed:exposed-core:$exposedVersion")
-    compileOnly("org.jetbrains.exposed:exposed-dao:$exposedVersion")
-    compileOnly("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+    implementation("joda-time:joda-time:$jodaTimeVersion")
 
+    // Needs to be shaded
+    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+
+    implementation("org.xerial:sqlite-jdbc:$jdbcVersion")
     implementation("net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT")
-
     implementation("org.spongepowered:configurate-hocon:$configurateVersion")
     implementation("org.spongepowered:configurate-extra-kotlin:$configurateVersion")
 }
@@ -43,19 +50,19 @@ tasks.processResources {
         "version" to project.version,
         "kotlinVersion" to kotlinVersion,
         "exposedVersion" to exposedVersion,
-        "configurateVersion" to configurateVersion
+        "configurateVersion" to configurateVersion,
     )
 }
 
-blossom {
-    val file = "src/main/kotlin/si/budimir/death/enums/Constants.kt"
-    mapOf(
-        "PLUGIN_NAME" to rootProject.name,
-        "PLUGIN_VERSION" to project.version
-    ).forEach { (k, v) ->
-        replaceToken("{$k}", v, file)
-    }
-}
+//blossom {
+//    val file = "src/main/kotlin/si/budimir/death/enums/Constants.kt"
+//    mapOf(
+//        "PLUGIN_NAME" to rootProject.name,
+//        "PLUGIN_VERSION" to project.version
+//    ).forEach { (k, v) ->
+//        replaceToken("{$k}", v, file)
+//    }
+//}
 
 tasks.shadowJar {
     // This makes it shadow only stuff with "implementation"

@@ -1,19 +1,27 @@
 name: Death
 version: ${version}
 main: si.budimir.death.DeathMain
-api-version: 1.17
+api-version: 1.18
 prefix: Death
 authors: [ budi1200 ]
 description: Death plugin made for SloCraft servers
 libraries:
   - org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}
-  - org.jetbrains.exposed:exposed-core:${exposedVersion}
-  - org.jetbrains.exposed:exposed-dao:${exposedVersion}
-  - org.jetbrains.exposed:exposed-jdbc:${exposedVersion}
 commands:
   death:
     description: Death main command
     usage: /death <sub command>
-  kjesemcrkno:
+  kjesemumrl:
     description: Shows last death location
     usage: /kjesemcrkno
+    aliases:
+      - kjesemcrkno
+      - lastdeath
+      - kjesempoginil
+      - kjesmrt
+      - zadnjasmrt
+      - grob
+  smrti:
+    description: Shows last 5 deaths
+    aliases:
+      - nedavnesmrti

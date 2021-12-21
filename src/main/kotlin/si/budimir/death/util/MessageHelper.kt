@@ -9,17 +9,17 @@ import si.budimir.death.DeathMain
 abstract class MessageHelper {
     companion object {
         private var plugin = DeathMain.instance
-        private lateinit var pluginPrefix: Component
+        lateinit var pluginPrefix: Component
 
         fun load(plugin: DeathMain) {
             this.plugin = plugin
-            pluginPrefix = parseString(plugin.mainConfig.pluginPrefix)
+            pluginPrefix = getParsedString(plugin.mainConfig.pluginPrefix)
         }
 
         private val miniMessage = MiniMessage.builder().markdown().build()
 
         fun reloadPrefix() {
-            pluginPrefix = parseString(plugin.mainConfig.pluginPrefix)
+            pluginPrefix = getParsedString(plugin.mainConfig.pluginPrefix)
         }
 
         // Send message with string from config
@@ -35,15 +35,6 @@ abstract class MessageHelper {
             player.sendMessage(tmp)
         }
 
-        fun parseString(key: String, placeholders: Map<String, String> = hashMapOf()): Component {
-            return Component
-                .text("")
-                .decoration(TextDecoration.ITALIC, false)
-                .append(
-                    miniMessage.parse(key, placeholders)
-                )
-        }
-
         fun getParsedString(key: String, placeholders: Map<String, String> = hashMapOf()): Component {
             return Component
                 .text("")
@@ -52,5 +43,10 @@ abstract class MessageHelper {
                     miniMessage.parse(key, placeholders)
                 )
         }
+
+        fun String.capitalizeWords(delimiter: String): String =
+            split(delimiter).joinToString(" ") { str -> str.replaceFirstChar { it.uppercase() } }
+
+        fun String.capitalize(): String = replaceFirstChar { f -> f.uppercase() }
     }
 }

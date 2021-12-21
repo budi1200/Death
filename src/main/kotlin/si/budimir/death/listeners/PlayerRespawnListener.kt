@@ -28,6 +28,7 @@ class PlayerRespawnListener(private val plugin: DeathMain): Listener {
         compass.editMeta { meta ->
             meta as CompassMeta
 
+            meta.setCustomModelData(22)
             meta.displayName(MessageHelper.getParsedString(plugin.mainConfig.lang.deathCompassTitle))
             meta.lore(plugin.mainConfig.lang.deathCompassLore.map { MessageHelper.getParsedString(it, placeholders) })
             meta.isLodestoneTracked = false

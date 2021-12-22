@@ -30,7 +30,13 @@ class PlayerDamageListener(private val plugin: DeathMain): Listener {
 
         @Suppress("LiftReturnOrAssignment")
         if (e.cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
-            deathCause = (e as EntityDamageByEntityEvent).damager.type.toString()
+            val entity = e as EntityDamageByEntityEvent
+
+            if (entity is Player) {
+                deathCause = entity.name
+            } else {
+                deathCause = entity.damager.type.toString()
+            }
         } else {
             deathCause = e.cause.toString()
         }

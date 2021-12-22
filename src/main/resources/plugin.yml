@@ -5,8 +5,6 @@ api-version: 1.18
 prefix: Death
 authors: [ budi1200 ]
 description: Death plugin made for SloCraft servers
-libraries:
-  - org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}
 commands:
   death:
     description: Death main command

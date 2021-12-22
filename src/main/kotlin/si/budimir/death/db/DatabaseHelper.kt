@@ -18,6 +18,8 @@ class DatabaseHelper {
                             set(it.deathLocation, data.deathLocation)
                             set(it.deathTime, data.deathTime)
                         }
+
+                        it.commit()
                     }
 
                     callback(true)

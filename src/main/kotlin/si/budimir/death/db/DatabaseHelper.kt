@@ -1,10 +1,6 @@
 package si.budimir.death.db
 
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.ktorm.dsl.*
 import si.budimir.death.DeathMain
 
 class DatabaseHelper {
@@ -15,12 +11,12 @@ class DatabaseHelper {
         fun logDeath(data: DeathData, callback: (Boolean) -> Unit) {
             plugin.server.scheduler.runTaskAsynchronously(plugin, Runnable {
                 try {
-                    transaction(plugin.dbManager.getDatabase()) {
-                        DeathEntity.insert {
-                            it[uuid] = data.uuid
-                            it[deathReason] = data.deathReason
-                            it[deathLocation] = data.deathLocation
-                            it[deathTime] = data.deathTime
+                    plugin.dbManager.getDatabase().useTransaction {
+                        plugin.dbManager.getDatabase().insert(DeathEntity) {
+                            set(it.uuid, data.uuid)
+                            set(it.deathReason, data.deathReason)
+                            set(it.deathLocation, data.deathLocation)
+                            set(it.deathTime, data.deathTime)
                         }
                     }
 
@@ -37,12 +33,19 @@ class DatabaseHelper {
         fun getLastXDeaths(playerUUID: String, numberOfDeaths: Int, callback: (List<DeathData>) -> Unit) {
             plugin.server.scheduler.runTaskAsynchronously(plugin, Runnable {
                 try {
-                    val select = transaction(plugin.dbManager.getDatabase()) {
-                        DeathEntity
-                            .select { DeathEntity.uuid eq playerUUID }
-                            .orderBy(DeathEntity.deathTime to SortOrder.DESC)
+                    val database = plugin.dbManager.getDatabase()
+                    val select = database.useTransaction {
+                        database
+                            .from(DeathEntity)
+                            .select()
+                            .where(DeathEntity.uuid eq playerUUID)
+                            .orderBy(DeathEntity.deathTime.desc())
                             .limit(numberOfDeaths)
-                            .map { mapToDeathData(it) }
+                            .mapNotNull {
+                                if (it[DeathEntity.uuid] == null) return@mapNotNull null
+
+                                mapToDeathData(it)
+                            }
                     }
 
                     callback(select)
@@ -54,11 +57,11 @@ class DatabaseHelper {
             })
         }
 
-        private fun mapToDeathData(it: ResultRow) = DeathData(
-            it[DeathEntity.uuid],
-            it[DeathEntity.deathReason],
-            it[DeathEntity.deathLocation],
-            it[DeathEntity.deathTime],
+        private fun mapToDeathData(it: QueryRowSet) = DeathData(
+            it[DeathEntity.uuid]!!,
+            it[DeathEntity.deathReason]!!,
+            it[DeathEntity.deathLocation]!!,
+            it[DeathEntity.deathTime]!!,
             it[DeathEntity.id]
         )
     }

@@ -1,10 +1,11 @@
 package si.budimir.death.db
 
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.ktorm.database.Database
+import org.ktorm.schema.Table
+import org.ktorm.schema.int
+import org.ktorm.schema.long
+import org.ktorm.schema.varchar
+import org.ktorm.support.sqlite.SQLiteDialect
 import si.budimir.death.DeathMain
 import java.io.File
 
@@ -23,11 +24,25 @@ class DatabaseManager(private val plugin: DeathMain) {
 
             val url: String = "jdbc:sqlite:" + dbFile.path
 
-            db = Database.connect(url, "org.sqlite.JDBC")
+            db = Database.connect(
+                url = url,
+                driver = "si.budimir.death.libs.sqlite.JDBC",
+                dialect = SQLiteDialect()
+            )
 
             if (isNew) {
-                transaction {
-                    SchemaUtils.create(DeathEntity)
+                db.useConnection {
+                    val sql = """
+                        CREATE TABLE death_entity (
+                          id INTEGER PRIMARY KEY AUTOINCREMENT,
+                          uuid BINARY(16) NOT NULL,
+                          death_reason VARCHAR(254) NOT NULL,
+                          death_location VARCHAR(254) NOT NULL,
+                          death_time BIGINT NOT NULL
+                        )
+                    """.trimIndent()
+
+                    it.prepareStatement(sql).execute()
                 }
             }
         } catch (e: Exception) {
@@ -41,12 +56,10 @@ class DatabaseManager(private val plugin: DeathMain) {
     }
 }
 
-object DeathEntity: Table("death_entity") {
-    val id: Column<Int> = integer("id").autoIncrement()
-    val uuid: Column<String> = varchar("uuid", 254)
-    val deathReason: Column<String> = varchar("death_reason", 254)
-    val deathLocation: Column<String> = varchar("death_location", 254)
-    val deathTime: Column<Long> = long("death_time")
-
-    override val primaryKey = PrimaryKey(id)
+object DeathEntity: Table<Nothing>("death_entity") {
+    val id = int("id").primaryKey()
+    val uuid = varchar("uuid")
+    val deathReason = varchar("death_reason")
+    val deathLocation = varchar("death_location")
+    val deathTime = long("death_time")
 }

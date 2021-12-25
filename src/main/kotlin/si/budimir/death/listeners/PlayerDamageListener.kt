@@ -11,6 +11,7 @@ import si.budimir.death.db.DatabaseHelper
 import si.budimir.death.db.DeathData
 import si.budimir.death.util.LocationHelper
 import si.budimir.death.util.MessageHelper
+import si.budimir.death.util.MessageHelper.Companion.capitalize
 
 class PlayerDamageListener(private val plugin: DeathMain): Listener {
 
@@ -30,15 +31,17 @@ class PlayerDamageListener(private val plugin: DeathMain): Listener {
 
         @Suppress("LiftReturnOrAssignment")
         if (e.cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
-            val entity = e as EntityDamageByEntityEvent
+            e as EntityDamageByEntityEvent
 
-            if (entity is Player) {
-                deathCause = entity.name
+            val damager = e.damager
+
+            if (damager is Player) {
+                deathCause = damager.name
             } else {
-                deathCause = entity.damager.type.toString()
+                deathCause = damager.type.toString().lowercase().capitalize()
             }
         } else {
-            deathCause = e.cause.toString()
+            deathCause = e.cause.toString().lowercase().capitalize()
         }
 
         val death = DeathData(player.uniqueId.toString(), deathCause, LocationHelper.loc2string(deathLocation), deathTime)

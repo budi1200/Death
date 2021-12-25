@@ -21,7 +21,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
 }
 
 group = "si.budimir"
-version = "1.0"
+version = "1.1"
 
 repositories {
     mavenCentral()

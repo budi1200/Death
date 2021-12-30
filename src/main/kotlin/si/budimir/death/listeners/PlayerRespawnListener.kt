@@ -24,6 +24,7 @@ class PlayerRespawnListener(private val plugin: DeathMain): Listener {
         val deathLocation = LocationHelper.string2loc(deathData.deathLocation)
         // Death info placeholders
         val placeholders = deathData.getPlaceholders()
+        placeholders["playerName"] = player.name
 
         compass.editMeta { meta ->
             meta as CompassMeta

@@ -40,7 +40,12 @@ class KjeSemUmrlCommand(private val plugin: DeathMain): CommandExecutor, TabExec
             // Death info placeholders
             val placeholders = latestDeath.getPlaceholders()
             placeholders["deathRelativeTime"] = DateTimeHelper.prettyPrintPeriod(relativeTime)
-            placeholders["distance"] = playerLoc.distance(deathLocation ?: playerLoc).roundToInt().toString() + 'm'
+
+            if (playerLoc.world == deathLocation?.world) {
+                placeholders["distance"] = playerLoc.distance(deathLocation ?: playerLoc).roundToInt().toString() + 'm'
+            } else {
+                placeholders["distance"] = "-1m"
+            }
 
             MessageHelper.sendMessage(sender, plugin.mainConfig.lang.lastDeathLocation, placeholders)
         }

@@ -13,15 +13,15 @@ data class MainConfigData(
 data class Lang(
     val missingPermission: String = "You do not have the required premission",
     val locationLogFail: String = "Failed to save death location",
-    @Comment("Usable placeholders: locWorld, locX, locY, locZ, deathReason, deathTime")
-    val deathMessage: String = "<red>You died! At <locX>:<locY>:<locZ> in <locWorld> from <deathReason>",
+    @Comment("Usable placeholders: loc_world, locx, locy, locz, death_reason, death_time")
+    val deathMessage: String = "<red>You died! At <locx>:<locy>:<locz> in <loc_world> from <death_reason>",
     val noDeathsFound: String = "There are no deaths on record",
-    @Comment("Usable placeholders: locWorld, locX, locY, locZ, deathReason, deathTime, deathRelativeTime")
-    val lastDeathLocation: String = "Last death location is at <locX>:<locY>:<locZ> in <locWorld> (<distance>) from <deathReason> pred <deathTime>",
-    @Comment("Usable placeholders: locWorld, locX, locY, locZ, deathReason")
-    val deathEntry: String = "Death at at <locX>:<locY>:<locZ> in <locWorld> from <deathReason> at <deathTime>",
+    @Comment("Usable placeholders: loc_world, locx, locy, locz, death_reason, death_time, deathRelativeTime")
+    val lastDeathLocation: String = "Last death location is at <locx>:<locy>:<locz> in <loc_world> (<distance>) from <death_reason> pred <death_time>",
+    @Comment("Usable placeholders: loc_world, locx, locy, locz, death_reason")
+    val deathEntry: String = "Death at at <locx>:<locy>:<locz> in <loc_world> from <death_reason> at <death_time>",
     val deathCompassTitle: String = "Death Compass",
-    @Comment("Usable placeholders: locWorld, locX, locY, locZ, deathReason")
-    val deathCompassLore: List<String> = listOf("<yellow>Death location: <locX>:<locY>:<locZ> in <locWorld> at <deathTime>"),
+    @Comment("Usable placeholders: loc_world, locx, locy, locz, death_reason")
+    val deathCompassLore: List<String> = listOf("<yellow>Death location: <locx>:<locy>:<locz> in <loc_world> at <death_time>"),
     val lastFiveDeathsHeader: String = "Your last 5 deaths:"
     )

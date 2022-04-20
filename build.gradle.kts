@@ -21,7 +21,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
 }
 
 group = "si.budimir"
-version = "1.3"
+version = "1.4"
 
 repositories {
     mavenCentral()
@@ -34,11 +34,10 @@ dependencies {
     implementation("org.ktorm:ktorm-core:${ktormVersion}")
     implementation("org.ktorm:ktorm-support-sqlite:${ktormVersion}")
 
-    compileOnly("io.papermc.paper:paper-api:1.18.1-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
     implementation("joda-time:joda-time:$jodaTimeVersion")
 
     implementation("org.xerial:sqlite-jdbc:$jdbcVersion")
-    implementation("net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT")
     implementation("org.spongepowered:configurate-hocon:$configurateVersion")
     implementation("org.spongepowered:configurate-extra-kotlin:$configurateVersion")
 }
@@ -53,7 +52,6 @@ tasks.processResources {
 
 tasks.shadowJar {
     relocate("org.ktorm", "si.budimir.death.libs.org.ktorm")
-    relocate("org.sqlite", "si.budimir.death.libs.sqlite")
     relocate("org.spongepowered", "si.budimir.death.libs.org.spongepowered")
 
     mergeServiceFiles()

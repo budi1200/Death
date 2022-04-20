@@ -15,12 +15,12 @@ data class DeathData(
         val worldLocation = LocationHelper.string2loc(deathLocation)
 
         return hashMapOf(
-            "locWorld" to (worldLocation?.world?.name?.capitalizeWords("_") ?: "null"),
-            "locX" to worldLocation?.blockX.toString(),
-            "locY" to worldLocation?.blockY.toString(),
-            "locZ" to worldLocation?.blockZ.toString(),
-            "deathReason" to deathReason,
-            "deathTime" to DateTimeHelper.prettyPrintTimestamp(deathTime)
+            "loc_world" to (worldLocation?.world?.name?.capitalizeWords("_") ?: "null"),
+            "locx" to worldLocation?.blockX.toString(),
+            "locy" to worldLocation?.blockY.toString(),
+            "locz" to worldLocation?.blockZ.toString(),
+            "death_reason" to deathReason,
+            "death_time" to DateTimeHelper.prettyPrintTimestamp(deathTime)
         )
     }
 }

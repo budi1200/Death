@@ -26,7 +26,7 @@ class DatabaseManager(private val plugin: DeathMain) {
 
             db = Database.connect(
                 url = url,
-                driver = "si.budimir.death.libs.sqlite.JDBC",
+                driver = "org.sqlite.JDBC",
                 dialect = SQLiteDialect()
             )
 

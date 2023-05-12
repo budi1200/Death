@@ -30,7 +30,7 @@ On startup a configuration file is loaded: `config.conf`. This file is generated
 ### Usage
 
   - `/kjesemumrl` - Prints the players latest death location.
-  - `/smrti`- Prints the players recent deaths.
+  - `/smrti` - Prints the players recent deaths.
   - `/death reload` - Reloads the plugin's configuration files. 
 
 ### Permissions
